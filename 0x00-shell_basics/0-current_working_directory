@@ -1,4 +1,2 @@
-import os
-
-cwd = os.getcwd()
-print(cwd)
+#!/bin/bash
+pwd
