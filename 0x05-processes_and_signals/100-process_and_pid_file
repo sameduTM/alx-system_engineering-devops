@@ -10,9 +10,12 @@ function term_sig() {
     rm -f /var/run/myscript.pid
     exit
 }
+
+echo "$$" > /var/run/myscript.pid
+
 trap 'echo I hate the kill command;term_sig' SIGTERM
 trap 'echo Y U no love me?!' SIGINT
-trap 'term_sig' SIGQUIT SIGTERM
+trap 'term_sig' SIGQUIT
 
 while true
 do
