@@ -12,7 +12,7 @@ function term_sig() {
 }
 trap 'echo I hate the kill command;term_sig' SIGTERM
 trap 'echo Y U no love me?!' SIGINT
-trap 'term_sig' SIGQUIT
+trap 'term_sig' SIGQUIT SIGTERM
 
 while true
 do
