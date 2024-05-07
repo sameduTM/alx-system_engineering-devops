@@ -21,5 +21,5 @@ def top_ten(subreddit):
         dta = r.json()['data']
 
         content = dta['children']
-        for c in content:
-            print(c['data']['title'])
+        for post in content:
+            print(post['data']['title'])
