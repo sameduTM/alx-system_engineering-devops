@@ -2,7 +2,6 @@
 """function that queries the Reddit API and returns the number of subscribers
 (not active users, total subscribers) for a given subreddit
 """
-
 import requests
 
 
@@ -10,7 +9,7 @@ def number_of_subscribers(subreddit):
     """Request number of subreddit from API"""
 
     user_agent = '0x16-api_advanced-samedutm'
-    url = 'https://www.reddit.com/r/{}.json'.format(subreddit)
+    url = 'https://www.reddit.com/r/{}/about.json'.format(subreddit)
 
     hdrs = {'User-Agent': user_agent}
 
