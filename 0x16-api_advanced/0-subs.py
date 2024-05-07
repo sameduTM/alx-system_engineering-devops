@@ -6,17 +6,14 @@ import requests
 
 
 def number_of_subscribers(subreddit):
-    """Request number of subreddit from API"""
+    url = f'https://www.reddit.com/r/{subreddit}/about.json'
+    headers = {'User-Agent': 'Mozilla/5.0 (compatible; Python Script/1.0)'}
+    response = requests.get(url, headers=headers, allow_redirects=False)
 
-    user_agent = '0x16-api_advanced-samedutm'
-    url = 'https://www.reddit.com/r/{}/about.json'.format(subreddit)
-
-    hdrs = {'User-Agent': user_agent}
-
-    r = requests.get(url, headers=hdrs, allow_redirects=False)
-
-    if r.status_code == 404:
-        return 0
-
-    res = r.json().get('data')
-    return res.get('subscribers')
+    if response.status_code == 200:
+        try:
+            data = response.json()
+            return data['data']['subscribers']
+        except KeyError:
+            return 0
+    return 0
