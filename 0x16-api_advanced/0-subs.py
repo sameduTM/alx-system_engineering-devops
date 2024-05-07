@@ -12,17 +12,12 @@ def number_of_subscribers(subreddit):
     user_agent = '0x16-api_advanced-samedutm'
     url = 'https://www.reddit.com/r/{}.json'.format(subreddit)
 
-    headers = {'User-Agent': user_agent}
+    hdrs = {'User-Agent': user_agent}
 
-    r = requests.get(url, headers=headers, allow_redirects=False)
+    r = requests.get(url, headers=hdrs, allow_redirects=False)
 
-    if r.status_code != 200:
+    if r.status_code == 404:
         return 0
 
-    dta = r.json()['data']
-
-    pgs = dta['children']
-
-    pg_dta = pgs[0]['data']
-
-    return pg_dta['subreddit_subscribers']
+    res = r.json().get('data')
+    return res.get('subscribers')
