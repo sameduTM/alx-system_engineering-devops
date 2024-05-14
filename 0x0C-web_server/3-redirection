@@ -15,7 +15,7 @@ sudo ufw allow 'Nginx HTTP'
 # add a redirect_me page
 sudo mkdir -p /var/www/redirect_me/html
 
-echo "server {
+print "server {
         listen 80;
 
         location / {
