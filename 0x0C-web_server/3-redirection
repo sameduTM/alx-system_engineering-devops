@@ -3,11 +3,11 @@
 
 sudo apt update
 
-# install nginx
 sudo apt -y install nginx
 
-# enable nginx
 sudo ufw allow 'Nginx HTTP'
+
+sudo mkdir -p /var/www/redirect_me/html
 
 echo "server {
         listen 80;
@@ -15,12 +15,10 @@ echo "server {
         location / {
                 return 200 'Hello World!';
         }
-        rewrite ^/redirect_me$ /youtube.com permanent;
+        rewrite ^/redirect_me$ http://youtube.com permanent;
 
 }" | sudo tee /etc/nginx/sites-enabled/default
 
-# check error in nginx file
 sudo nginx -t
 
-# restart nginx
 sudo service nginx restart
