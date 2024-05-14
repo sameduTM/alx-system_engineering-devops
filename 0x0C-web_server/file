@@ -1,0 +1,5 @@
+sudo apt update
+cat file
+string_to_replace
+echo "Done!"
+
