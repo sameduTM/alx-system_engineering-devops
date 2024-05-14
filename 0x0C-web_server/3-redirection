@@ -26,11 +26,19 @@ print "server {
         }
 }" | sudo tee /etc/nginx/sites-enabled/default
 
-# create symbolic link
-# sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+string_to_replace="location / {
+                            return 200 'Hello World!\n';
+                    }"
+
+new_string="location / {
+                    return 200 'Hello World!\n';
+                    }
+            location /redirect_me {
+                    return 301 https:youtube.com;
+            }"
 
 # replace string
-# sudo sed -i 's/$string_to_replace/$new_string/g' /etc/nginx/sites-enabled/default
+sudo sed -i 's/$string_to_replace/$new_string/g' /etc/nginx/sites-enabled/default
 
 # check error in nginx file
 sudo nginx -t
