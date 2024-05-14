@@ -33,7 +33,7 @@ sudo awk '
         p = 0; next
     }
     !p
-' /etc/nginx/sites-enabled/default > temp && sudo mv temp /etc/nginx/sites-enabled/default
+' /etc/nginx/sites-enabled/default | sudo tee /etc/nginx/sites-enabled/default > /dev/null
 
 # replace string
 sudo sed -i 's/$string_to_replace/$new_string/g' /etc/nginx/sites-enabled/default
