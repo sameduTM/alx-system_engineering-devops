@@ -1,24 +1,39 @@
 #!/usr/bin/env bash
 # Configure your Nginx server to have a custom 404 page that contains the string Ceci n'est pas une page.
 
-# Update the package list
-sudo apt-get update -y
+sudo apt update
 
 # Install nginx
-sudo apt-get install nginx -y
+sudo apt -y install nginx
 
-# Create a simple "Hello World!" index page
-echo "Hello World!" | sudo tee /var/www/html/index.html > /dev/null
+# allow nginx on port 80
+sudo ufw allow 'Nginx HTTP'
 
-# Create a custom 404 error page
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html > /dev/null
+# create parent dir for 404 page
+# sudo mkdir -p /var/www/404/html
 
-# Backup the default nginx configuration file
-sudo cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.backup
+# create 404 html custom page
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/custom_404.html
 
-# Add configuration for redirect and custom 404 error page
-sudo sed -i "/server_name _;/a \\\n\tlocation /redirect_me {\n\t\treturn 301 https://www.youtube.com/@promiseadebayo205;\n\t}\n" /etc/nginx/sites-available/default
-sudo sed -i "/server_name _;/a \\\n\terror_page 404 /404.html;\n\n\tlocation = /404.html {\n\t\tinternal;\n\t}\n" /etc/nginx/sites-available/default
+echo "server {
+        listen 80;
 
-# Reload nginx to apply changes
-sudo service nginx reload
+        location / {
+                return 200 'Hello World!';
+        }
+        location /redirect_me {
+                return 301 https://youtube.com;
+        }
+
+        error_page 404 /custom_404.html;
+
+        location = /custom_404.html {
+            internal;
+        }
+}" | sudo tee /etc/nginx/sites-available/default
+
+# check for error in nginx file
+sudo nginx -t
+
+# restart nginx
+sudo service nginx restart
