@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 # Configure your Nginx server so that /redirect_me is redirecting to another page.
 
+# update repo
 sudo apt update
 
+# install ngnix
 sudo apt -y install nginx
 
+# allow nginx
 sudo ufw allow 'Nginx HTTP'
 
-sudo mkdir -p /var/www/redirect_me/html
+echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html
 
 echo "server {
         listen 80;
@@ -19,6 +22,7 @@ echo "server {
 
 }" | sudo tee /etc/nginx/sites-enabled/default
 
+# check for errors in nginx server block file
 sudo nginx -t
 
 sudo service nginx restart

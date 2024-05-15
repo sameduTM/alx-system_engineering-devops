@@ -10,6 +10,8 @@ sudo apt -y install nginx
 # allow nginx
 sudo ufw allow 'Nginx HTTP'
 
+echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html
+
 # create custom 404 page
 echo "Ceci n'est pas une page" | sudo tee /var/www/html/custom_404.html
 
