@@ -2,15 +2,15 @@
 # Configure your Nginx server to have a custom 404 page that contains the string Ceci n'est pas une page.
 
 # update repo
-sudo apt update
+sudo apt update > /dev/null 2>&1
 
 # install ngnix
-sudo apt -y install nginx
+sudo apt -y install nginx > /dev/null 2>&1
 
 # allow nginx
-sudo ufw allow 'Nginx HTTP'
+sudo ufw allow 'Nginx HTTP' > /dev/null 2>&1
 
-echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html
+echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html > /dev/null 2>&1
 
 # create custom 404 page
 echo "Ceci n'est pas une page" | sudo tee /var/www/html/custom_404.html
@@ -38,10 +38,10 @@ echo "server {
                 internal;
         }
 
-}" | sudo tee /etc/nginx/sites-enabled/default
+}" | sudo tee /etc/nginx/sites-enabled/default > /dev/null 2>&1
 
 # check for error in nginx file
-sudo nginx -t
+sudo nginx -t > /dev/null 2>&1
 
 # restart nginx
 sudo service nginx restart
