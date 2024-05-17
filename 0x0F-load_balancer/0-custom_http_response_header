@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Configure Nginx so that its HTTP response contains a custom header (on web-01 and web-02)
+
+# edit nginx server block file
+echo "server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        root /var/www/html;
+
+        index index.html index.htm index.nginx-debian.html;
+
+        location / {
+                try_files \$uri \$uri/ =404;
+                add_header X-Served-By \$hostname;
+        }
+
+        location /redirect_me/ {
+                return 301 http://wanyama-ken.tech;
+        }
+
+        error_page 404 /custom_404.html;
+        location = /custom_404.html {
+                root /var/www/html;
+                internal;
+        }
+
+}" | sudo tee /etc/nginx/sites-enabled/default > /dev/null 2>&1
+
+# check for error in nginx file
+sudo nginx -t > /dev/null 2>&1
+
+# restart nginx
+sudo service nginx restart
