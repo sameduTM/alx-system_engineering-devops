@@ -2,31 +2,18 @@
 # Configure Nginx so that its HTTP response contains a custom header (on web-01 and web-02)
 # shellcheck disable=SC2154
 
+sudo apt-get update
+
+sudo apt-get -y install nginx
+
+echo "Hello World!" > /var/www/html/index.nginx-debian.html
+
+echo "Ceci n'est pas une page" > /usr/share/nginx/html/custom_404.html
+
 # edit nginx server block file
-echo "server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
+sed -i "s/server_name _;/server_name _;\n\trewrite ^\/redirect_me https:\/\/github.com\/Tolulope05 permanent;\n\n\terror_page 404 \/custom_404.html;\n\tlocation = \/custom_404.html {\n\t\troot \/usr\/share\/nginx\/html;\n\t\tinternal;\n\t}/" /etc/nginx/sites-available/default
 
-        root /var/www/html;
-
-        index index.html index.htm index.nginx-debian.html;
-
-        location / {
-                try_files \$uri \$uri/ =404;
-                add_header X-Served-By \$hostname;
-        }
-
-        location /redirect_me/ {
-                return 301 http://wanyama-ken.tech;
-        }
-
-        error_page 404 /custom_404.html;
-        location = /custom_404.html {
-                root /var/www/html;
-                internal;
-        }
-
-}" | sudo tee /etc/nginx/sites-enabled/default > /dev/null 2>&1
+sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\tadd_header X-Served-By \"$HOSTNAME\";/" /etc/nginx/nginx.conf
 
 # check for error in nginx file
 sudo nginx -t > /dev/null 2>&1
