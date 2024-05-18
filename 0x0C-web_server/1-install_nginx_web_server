@@ -1,33 +1,18 @@
 #!/usr/bin/env bash
-# Configure your Nginx server so that /redirect_me is redirecting to another page.
+# Install nginx web server
 
-# update repo
 sudo apt update
 
-# install ngnix
+# install nginx
 sudo apt -y install nginx
 
-# start nginx
-sudo service nginx start
-
-# allow nginx
-sudo ufw allow 'Nginx HTTP'
-
-# allow privileges for modifying files in directtory
-sudo chown -R "$USER":"$USER" /var/www/html
-sudo chown -R 755 /var/www
-
-echo "Hello World!" | sudo tee /var/www/html/index.nginx-deebian.html
-
+# Configure nginx to listen to port 80 aand return "Hello World!"
 echo "server {
-        listen 80 default_server;
-        listen [::]:80 default_server; 
-
+        listen 80;
         location / {
-                try_files \$uri \$uri/ =404;
+                return 200 'Hello World!\n';
         }
-
-}" | sudo tee /etc/nginx/sites-enabled/default
+}" | sudo tee /etc/nginx/sites-available/default
 
 # Restart nginx without systemctl
 sudo service nginx restart
