@@ -7,13 +7,13 @@ sudo apt update
 sudo apt -y install nginx
 
 # Configure nginx to listen to port 80 aand return "Hello World!"
-echo "server {
+print "server {
         listen 80;
         location / {
                 return 200 'Hello World!\n';
         }
         location /redirect_me/ {
-                return 301 htttp://wanyama-tech.com;
+                return 301 http://wanyama-tech.com;
         }
 }" | sudo tee /etc/nginx/sites-available/default
 
