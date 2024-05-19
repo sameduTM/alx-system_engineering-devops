@@ -10,35 +10,16 @@ sudo apt -y install nginx > /dev/null 2>&1
 # allow nginx
 sudo ufw allow 'Nginx HTTP' > /dev/null 2>&1
 
-echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html > /dev/null 2>&1
+# default page and redirect page
+echo "Hello World!" | sudo tee /var/www/html/index.html
+string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.wanyama-tech.com permanent;"
+sudo sed -i "s/server_name _;/$string_for_replacement/" /etc/nginx/sites-enabled/default
 
-# create custom 404 page
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/custom_404.html
+# error 404 custom page
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
+string_for_replacement="listen 80 default_server;\n\terror_page 404 \/404.html;\n\tlocation = \/404.html {\n\t\troot \/var\/www\/html;\n\t\tinternal;\n\t}"
+sudo sed -i "s/listen 80 default_server;/$string_for_replacement/" /etc/nginx/sites-enabled/default
 
-# edit nginx server block file
-echo "server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
-
-        root /var/www/html;
-
-        index index.html index.htm index.nginx-debian.html;
-
-        location / {
-                try_files \$uri \$uri/ =404;
-        }
-
-        location /redirect_me/ {
-                return 301 http://youtube.com;
-        }
-
-        error_page 404 /custom_404.html;
-        location = {
-                root /var/www/html;
-                internal;
-        }
-
-}" | sudo tee /etc/nginx/sites-enabled/default > /dev/null 2>&1
 
 # check for error in nginx file
 sudo nginx -t > /dev/null 2>&1
