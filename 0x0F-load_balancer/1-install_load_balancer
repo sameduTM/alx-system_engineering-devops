@@ -4,12 +4,8 @@
 # u[pdate] repository
 sudo apt-get update
 
-# enable a dedicated PPA
-sudo apt-get -y install --no-install-recommends software-properties-common
-sudo add-apt-repository ppa:vbernat/haproxy-2.8
-
 # install haproxy
-sudo apt-get -y install haproxy=2.8.\*
+sudo apt-get -y install haproxy
 
 echo "frontend http_front
         bind *:80
@@ -20,8 +16,7 @@ echo "frontend http_front
         balance roundrobin
         server web-01 100.26.162.188:80 check
         server web-02 100.25.171.248:80 check
-        " | sudo tee /etc/haproxy/haproxy.cfg
+        " | sudo tee /etc/haproxy/haproxy.cfg > /dev/null 2>&1
 
-sudo service start haproxy
-
-sudo service enable haproxy
+# start haproxy service
+sudo service haproxy start
