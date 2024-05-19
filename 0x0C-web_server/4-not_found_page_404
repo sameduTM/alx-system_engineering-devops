@@ -11,7 +11,7 @@ sudo apt -y install nginx > /dev/null 2>&1
 sudo ufw allow 'Nginx HTTP' > /dev/null 2>&1
 
 # default page and redirect page
-echo "Hello World!" | sudo tee /var/www/html/index.html
+echo "Hello World!" | sudo tee /var/www/html/index.html > /dev/null/ 2>&1
 string_for_replacement="server_name _;\n\trewrite ^\/redirect_me https:\/\/www.wanyama-tech.com permanent;"
 sudo sed -i "s/server_name _;/$string_for_replacement/" /etc/nginx/sites-enabled/default
 
