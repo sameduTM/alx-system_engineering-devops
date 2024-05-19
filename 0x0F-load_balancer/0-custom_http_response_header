@@ -2,45 +2,15 @@
 # Configure Nginx so that its HTTP response contains a custom header (on web-01 and web-02)
 # shellcheck disable=SC2154
 
-sudo apt-get -y update
+sudo apt-get update
+sudo apt-get -y install nginx
+touch /var/www/html/index.html
+echo "Hello World!" > /var/www/html/index.html
+touch /var/www/html/404.html
+echo "Ceci n'est pas une page" > /var/www/html/404.html
+sudo sed -i "/server_name _/a add_header X-Served-By $HOSTNAME;" /etc/nginx/sites-enabled/default
+# Test the Nginx configuration
+sudo nginx -t
 
-# install nginx
-sudo apt-get -y install nginx=1.4.*
-
-# set string for default page
-echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html
-
-# error 404 custom page
-echo "Ceci n'est pas une page" | sudo tee /var/www/html/custom_404.html
-
-# edit nginx server block file
-echo "server {
-        listen 80 default_server;
-        listen [::]:80 default_server;
-
-        root /var/www/html;
-
-        index index.html index.htm index.nginx-debian.html;
-
-        location / {
-                try_files \$uri \$uri/ =404;
-                add_header X-Served-By \$hostname;
-        }
-
-        location /redirect_me/ {
-                return 301 http://wanyama-ken.tech;
-        }
-
-        error_page 404 /custom_404.html;
-        location = /custom_404.html {
-                root /var/www/html;
-                internal;
-        }
-
-}" | sudo tee /etc/nginx/sites-enabled/default > /dev/null 2>&1
-
-# check for error in nginx file
-sudo nginx -t > /dev/null 2>&1
-
-# restart nginx
+# Restart Nginx
 sudo service nginx restart
