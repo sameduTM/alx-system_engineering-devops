@@ -11,12 +11,15 @@ echo "frontend http_front
         bind *:80
         stats uri /haproxy?stats
         default_backend http_back
-      
+
       backend roundrobin
         balance roundrobin
         server web-01 100.26.162.188:80 check
         server web-02 100.25.171.248:80 check
         " | sudo tee /etc/haproxy/haproxy.cfg > /dev/null 2>&1
+
+# enable haproxy service
+echo "ENABLED=1" | sudo tee -a /etc/default/haproxy > /dev/null 2>&1
 
 # start haproxy service
 sudo service haproxy start
