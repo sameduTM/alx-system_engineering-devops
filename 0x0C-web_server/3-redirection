@@ -4,7 +4,7 @@
 sudo apt-get update
 
 # install nginx
-sudo apt-get -y install nginx
+sudo apt-get -y install nginx=1.4.*
 
 sudo sed -i '/^}/ i\\tlocation /redirect_me {\n\t\trewrite ^/redirect_me/?$ https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;\n\t}' /etc/nginx/sites-enabled/default
 
