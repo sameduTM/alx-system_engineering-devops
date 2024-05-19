@@ -2,7 +2,7 @@
 # Configure Nginx so that its HTTP response contains a custom header (on web-01 and web-02)
 # shellcheck disable=SC2154
 
-sudo apt-get update
+sudo apt-get -y update
 
 # install nginx
 sudo apt-get -y install nginx=1.4.*
