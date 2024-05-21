@@ -4,12 +4,12 @@
 sudo apt-get update
 
 # install nginx
-sudo apt-get -y install nginx=1.4.*
+sudo apt-get -y install nginx
+
+# Configure nginx to listen to port 80 aand return "Hello World!"
+echo "Hello World!" > /var/www/html/index.nginx-debian.html
 
 sudo sed -i '/^}/ i\\tlocation /redirect_me {\n\t\trewrite ^/redirect_me/?$ https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;\n\t}' /etc/nginx/sites-enabled/default
-
-# check for errors in nginx server block file
-sudo nginx -t
 
 # restart nginx service
 sudo service nginx restart
