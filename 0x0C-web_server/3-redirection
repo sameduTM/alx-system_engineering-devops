@@ -8,7 +8,7 @@ sudo apt-get -y install nginx
 
 sudo mkdir -p /var/www/html
 
-sudo chown -R $USER:$USER /var/www/html
+sudo chown -R "$USER":"$USER" /var/www/html
 
 sudo chmod -R 755 /var/www
 
