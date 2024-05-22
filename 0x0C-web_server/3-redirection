@@ -17,8 +17,5 @@ echo "Hello World!" > /var/www/html/index.html
 
 sudo sed -i '/^}/ i\\tlocation /redirect_me {\n\t\trewrite ^/redirect_me/?$ https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;\n\t}' /etc/nginx/sites-enabled/default
 
-# check error nginx conf
-sudo nginx -t
-
 # restart nginx service
 sudo service nginx restart
