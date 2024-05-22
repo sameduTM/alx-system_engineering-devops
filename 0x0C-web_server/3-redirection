@@ -1,23 +1,29 @@
 #!/usr/bin/env bash
 # Configure your Nginx server so that /redirect_me is redirecting to another page.
 
-sudo apt-get -y update
+# Update package list and install Nginx
+sudo apt-get update
+sudo apt-get install -y nginx
 
-# install nginx
-sudo apt-get -y install nginx
+# Configure Nginx to serve "Hello World!" at the root
+sudo bash -c 'echo "Hello World!" > /var/www/html/index.nginx-debian.html'
 
-sudo ufw allow 'Nginx HTTP'
+# Add redirection from /redirect_me to another page
+echo "server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
 
-sudo mkdir -p /var/www/html
+        server_name _;
 
-sudo chown -R "$USER":"$USER" /var/www/html
+        root /var/www/html;
+        index index.html index.nginx-debian.html;
 
-sudo chmod -R 755 /var/www
+        location / {
+                try_files \$uri \$uri/ =404;
+        }
+        rewrite ^/redirect_me$ http://wanyama-ken.tech/ permanent;
 
-# Configure nginx to listen to port 80 aand return "Hello World!"
-echo "Hello World!" | sudo tee /var/www/html/index.html
+}" | sudo tee /etc/nginx/sites-enabled/default
 
-sudo sed -i '/^}/ i\\tlocation /redirect_me {\n\t\trewrite ^/redirect_me/?$ https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;\n\t}' /etc/nginx/sites-enabled/default
-
-# restart nginx service
+# Restart Nginx without using systemctl
 sudo service nginx restart
