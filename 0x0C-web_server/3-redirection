@@ -6,6 +6,8 @@ sudo apt-get -y update
 # install nginx
 sudo apt-get -y install nginx
 
+sudo ufw allow 'Nginx HTTP'
+
 sudo mkdir -p /var/www/html
 
 sudo chown -R "$USER":"$USER" /var/www/html
