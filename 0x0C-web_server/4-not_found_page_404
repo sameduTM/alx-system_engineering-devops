@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# create custom 404 page
+
+# Update package list and install Nginx
+sudo apt-get update
+sudo apt-get install -y nginx
+
+# Configure Nginx to serve "Hello World!" at the root
+sudo bash -c 'echo "Hello World!" > /var/www/html/index.nginx-debian.html'
+
+# sudo bash -c 'echo "Ceci n'est pas une page" > /var/www/html/custom_404.html'
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/custom_404.html
+
+# Add redirection from /redirect_me to another page
+echo "server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        server_name _;
+
+        root /var/www/html;
+        index index.htm index.html index.nginx-debian.html;
+
+        location / {
+                try_files \$uri \$uri/ =404;
+        }
+        rewrite ^/redirect_me/?$ http://wanyama-ken.tech/ permanent;
+
+        error_page 404 /custom_404.html;
+        location = /custom_404.html {
+            internal;
+        }
+
+}" | sudo tee /etc/nginx/sites-enabled/default
+
+# Restart Nginx without using systemctl
+sudo service nginx restart
