@@ -28,5 +28,8 @@ echo "server {
 
 }" | sudo tee /etc/nginx/sites-enabled/default
 
+# test nginx configuration
+sudo nginx -t
+
 # Restart Nginx without using systemctl
 sudo service nginx restart
