@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
-# create custom 404 page
+# Configure Nginx so that its HTTP response contains a custom header (on web-01 and web-02)
+# The name of the custom HTTP header must be X-Served-By
+# The value of the custom HTTP header must be the hostname of the server Nginx is running on
+# Write 0-custom_http_response_header so that it configures a brand new Ubuntu machine to the requirements asked in this task
+# Ignore SC2154 for shellcheck
 
 # Update package list and install Nginx
 sudo apt-get update
@@ -23,7 +27,7 @@ echo "server {
 
         location / {
                 try_files \$uri \$uri/ =404;
-                add_header X-Server-By \$hostname;
+                add_header X-Served-By \$hostname;
         }
         rewrite ^/redirect_me/?$ http://wanyama-ken.tech/ permanent;
 
