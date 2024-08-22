@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Configure your domain zone so that the subdomain www points to your load-balancer IP (lb-01).
+# Let’s also add other subdomains to make our life easier, 
+# and write a Bash script that will display information about subdomains.
+
+sub=$2
+www=www.$1
+lb01=lb-01.$1
+web01=web-01.$1
+web02=web-02.$1
+
+func () 
+{
+    if [ $# -eq 1 ]
+    then
+        dig "$www" | grep -A1 "ANSWER SECTION" | grep -v "ANSWER" > temp
+        awk '{ print $0 "\twww"}' temp > apex
+        dig "$lb01" | grep -A1 "ANSWER SECTION" | grep -v "ANSWER" > temp
+        awk '{ print $0 "\tlb-01"}' temp >> apex
+        dig "$web01" | grep -A1 "ANSWER SECTION" | grep -v "ANSWER" > temp
+        awk '{ print $0 "\tweb-01"}' temp >> apex
+        dig "$web02" | grep -A1 "ANSWER SECTION" | grep -v "ANSWER" > temp
+        awk '{ print $0 "\tweb-02"}' temp >> apex
+        awk '/A/ { print "The subdomain " $6 " is a " $4 " record and points to " $5 } ' arg2="${sub}" apex
+    else
+        dig "$2.$1" | grep -A1 "ANSWER SECTION" | grep -v "ANSWER" > temp
+        awk '{ print $0 "\t"sbd}' sbd="$sub" temp > apex
+
+    fi
+    awk '/A/ { print "The subdomain " $6 " is a " $4 " record and points to " $5 } ' arg2="${sub}" apex
+
+}
+func "$@"
