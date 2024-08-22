@@ -21,7 +21,6 @@ func ()
         awk '{ print $0 "\tweb-01"}' temp >> apex
         dig "$web02" | grep -A1 "ANSWER SECTION" | grep -v "ANSWER" > temp
         awk '{ print $0 "\tweb-02"}' temp >> apex
-        awk '/A/ { print "The subdomain " $6 " is a " $4 " record and points to " $5 } ' arg2="${sub}" apex
     else
         dig "$2.$1" | grep -A1 "ANSWER SECTION" | grep -v "ANSWER" > temp
         awk '{ print $0 "\t"sbd}' sbd="$sub" temp > apex
