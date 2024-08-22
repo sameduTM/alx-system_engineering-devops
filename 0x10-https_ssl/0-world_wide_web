@@ -28,6 +28,7 @@ func ()
 
     fi
     awk '/A/ { print "The subdomain " $6 " is a " $4 " record and points to " $5 } ' arg2="${sub}" apex
+    rm -f temp apex
 
 }
 func "$@"
