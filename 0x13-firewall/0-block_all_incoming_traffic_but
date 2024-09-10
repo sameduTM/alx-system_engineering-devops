@@ -1,5 +1,5 @@
 sudo apt install ufw
 sudo ufw deny to all
-sudo ufw allow in 22
-sudo ufw allow in 443
-sudo ufw allow in 80
+sudo ufw allow 22
+sudo ufw allow 443
+sudo ufw allow 80
