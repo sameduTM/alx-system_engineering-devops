@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 # Exit script if any command fails
 set -e
 
@@ -35,12 +35,22 @@ nginx -t
 
 # Restart Nginx to apply changes
 echo "Restarting Nginx..."
-# systemctl restart nginx
-service nginx restart
+systemctl restart nginx
 
 # Verify Nginx is running as the nginx user and on port 8080
-echo "Verifying Nginx configuration..."
-ps aux | grep nginx | grep -v grep | grep nginx
+echo "Verifying Nginx process is running as the nginx user..."
+
+# Use pgrep to check if nginx processes are running as 'nginx' user
+if pgrep -u nginx nginx > /dev/null; then
+    echo "Nginx is running under the nginx user."
+else
+    echo "Error: Nginx is not running under the nginx user."
+    exit 1
+fi
+
+# Check if Nginx is listening on port 8080
+echo "Verifying Nginx is listening on port 8080..."
+
 if ss -tuln | grep ":8080"; then
     echo "Nginx is listening on port 8080."
 else
@@ -49,3 +59,4 @@ else
 fi
 
 echo "Nginx is configured successfully."
+
