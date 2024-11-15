@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+# Exit script if any command fails
+set -e
+
+# Ensure Nginx is installed
+if ! command -v nginx &> /dev/null; then
+    echo "Nginx is not installed. Please install it first."
+    exit 1
+fi
+
+# Check for the nginx user and create it if it doesn't exist
+if ! id -u nginx &> /dev/null; then
+    echo "Creating nginx user..."
+    useradd -r -s /sbin/nologin nginx
+else
+    echo "Nginx user already exists."
+fi
+
+# Update the Nginx configuration file
+NGINX_CONF="/etc/nginx/nginx.conf"
+
+echo "Updating Nginx configuration..."
+
+if [[ -f "$NGINX_CONF" ]]; then
+    sed -i "s/^user .*/user nginx;/" "$NGINX_CONF"                # Set the user to nginx
+    sed -i "s/^listen .*/listen 8080;/" /etc/nginx/sites-enabled/* # Ensure listening on port 8080 for all active IPs
+else
+    echo "Error: Nginx configuration file not found at $NGINX_CONF"
+    exit 1
+fi
+
+# Check the syntax of the Nginx configuration
+echo "Checking Nginx configuration..."
+nginx -t
+
+# Restart Nginx to apply changes
+echo "Restarting Nginx..."
+# systemctl restart nginx
+service nginx restart
+
+# Verify Nginx is running as the nginx user and on port 8080
+echo "Verifying Nginx configuration..."
+ps aux | grep nginx | grep -v grep | grep nginx
+if ss -tuln | grep ":8080"; then
+    echo "Nginx is listening on port 8080."
+else
+    echo "Error: Nginx is not listening on port 8080."
+    exit 1
+fi
+
+echo "Nginx is configured successfully."
