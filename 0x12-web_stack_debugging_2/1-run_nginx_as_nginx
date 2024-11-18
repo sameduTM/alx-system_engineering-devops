@@ -1,62 +1,9 @@
-#!/bin/bash
-# Exit script if any command fails
-set -e
+#!/usr/bin/env bash
+# Run nginx as nginx user
 
-# Ensure Nginx is installed
-if ! command -v nginx &> /dev/null; then
-    echo "Nginx is not installed. Please install it first."
-    exit 1
-fi
-
-# Check for the nginx user and create it if it doesn't exist
-if ! id -u nginx &> /dev/null; then
-    echo "Creating nginx user..."
-    useradd -r -s /sbin/nologin nginx
-else
-    echo "Nginx user already exists."
-fi
-
-# Update the Nginx configuration file
-NGINX_CONF="/etc/nginx/nginx.conf"
-
-echo "Updating Nginx configuration..."
-
-if [[ -f "$NGINX_CONF" ]]; then
-    sed -i "s/^user .*/user nginx;/" "$NGINX_CONF"                # Set the user to nginx
-    sed -i "s/^listen .*/listen 8080;/" /etc/nginx/sites-enabled/* # Ensure listening on port 8080 for all active IPs
-else
-    echo "Error: Nginx configuration file not found at $NGINX_CONF"
-    exit 1
-fi
-
-# Check the syntax of the Nginx configuration
-echo "Checking Nginx configuration..."
-nginx -t
-
-# Restart Nginx to apply changes
-echo "Restarting Nginx..."
-systemctl restart nginx
-
-# Verify Nginx is running as the nginx user and on port 8080
-echo "Verifying Nginx process is running as the nginx user..."
-
-# Use pgrep to check if nginx processes are running as 'nginx' user
-if pgrep -u nginx nginx > /dev/null; then
-    echo "Nginx is running under the nginx user."
-else
-    echo "Error: Nginx is not running under the nginx user."
-    exit 1
-fi
-
-# Check if Nginx is listening on port 8080
-echo "Verifying Nginx is listening on port 8080..."
-
-if ss -tuln | grep ":8080"; then
-    echo "Nginx is listening on port 8080."
-else
-    echo "Error: Nginx is not listening on port 8080."
-    exit 1
-fi
-
-echo "Nginx is configured successfully."
+sed -i "s/#user www-data/user nginx" /etc/nginx/nginx.conf
+sed -i "s/80/8080/g" /etc/nginx/sites-available/default
+chmod 644 /etc/nginx/nginx.conf
+pkill apache2
+sudo -u nginx service nginx start
 
