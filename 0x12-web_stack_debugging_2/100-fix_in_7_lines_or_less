@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Using what you did for task #1, make your fix short and sweet.
+
+sudo -u "$1" id -un
+
