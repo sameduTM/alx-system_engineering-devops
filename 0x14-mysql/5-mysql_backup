@@ -5,4 +5,4 @@ sudo mysqldump -u root -p"$1" --all-databases > backup.sql
 
 cx=$(date +"%d-%m-%Y".tar.gz)
 
-sudo tar -cz backup.sql -f "$cx"
+sudo tar -czf "$cx" backup.sql
