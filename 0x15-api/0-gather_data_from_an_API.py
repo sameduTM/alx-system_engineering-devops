@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Python script that, using this REST API, for a given employee ID, 
+"""Python script that, using this REST API, for a given employee ID,
 returns information about his/her TODO list progress.
 """
 import requests
@@ -16,7 +16,7 @@ def rest_api():
     NUMBER_OF_DONE_TASKS = 0
     TOTAL_NUMBER_OF_TASKS = len(r.json())
     for item in r.json():
-        if item['completed'] == True:
+        if item['completed'] is True:
             NUMBER_OF_DONE_TASKS += 1
 
     print(f'''Employee {EMPLOYEE_NAME} is done with tasks ({
