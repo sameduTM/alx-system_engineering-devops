@@ -20,7 +20,7 @@ def rest_api():
             NUMBER_OF_DONE_TASKS += 1
 
     print(f'''Employee {EMPLOYEE_NAME} is done with tasks ({
-        NUMBER_OF_DONE_TASKS}/{TOTAL_NUMBER_OF_TASKS})''')
+        NUMBER_OF_DONE_TASKS}/{TOTAL_NUMBER_OF_TASKS}):''')
 
     for item in r.json():
         if item['completed'] is True:
