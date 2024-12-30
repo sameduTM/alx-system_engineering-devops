@@ -23,7 +23,8 @@ def rest_api():
         NUMBER_OF_DONE_TASKS}/{TOTAL_NUMBER_OF_TASKS})''')
 
     for item in r.json():
-        print('    ', item['title'])
+        if item['completed'] is True:
+            print('    ', item['title'])
 
 
 if __name__ == '__main__':
