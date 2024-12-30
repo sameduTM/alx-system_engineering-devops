@@ -19,10 +19,11 @@ def rest_api():
         if item['completed'] == True:
             NUMBER_OF_DONE_TASKS += 1
 
-    print(f'Employee {EMPLOYEE_NAME} is done with tasks ({NUMBER_OF_DONE_TASKS}/{TOTAL_NUMBER_OF_TASKS})')
+    print(f'''Employee {EMPLOYEE_NAME} is done with tasks ({
+        NUMBER_OF_DONE_TASKS}/{TOTAL_NUMBER_OF_TASKS})''')
 
     for item in r.json():
-        print(' \t', item['title'])
+        print('    ', item['title'])
 
 
 if __name__ == '__main__':
