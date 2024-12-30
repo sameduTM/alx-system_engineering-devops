@@ -5,19 +5,25 @@ returns information about his/her TODO list progress.
 import requests
 import sys
 
-s = requests.get(f'https://jsonplaceholder.typicode.com/users/{sys.argv[1]}')
-r = requests.get(
-    f'https://jsonplaceholder.typicode.com/users/{sys.argv[1]}/todos')
-EMPLOYEE_NAME = s.json()['name']
-NUMBER_OF_DONE_TASKS = 0
-TOTAL_NUMBER_OF_TASKS = len(r.json())
 
-for item in r.json():
-    if item['completed'] == True:
-        NUMBER_OF_DONE_TASKS += 1
+def rest_api():
+    """Main function of module"""
+    s = requests.get(
+        f'https://jsonplaceholder.typicode.com/users/{sys.argv[1]}')
+    r = requests.get(
+        f'https://jsonplaceholder.typicode.com/users/{sys.argv[1]}/todos')
+    EMPLOYEE_NAME = s.json()['name']
+    NUMBER_OF_DONE_TASKS = 0
+    TOTAL_NUMBER_OF_TASKS = len(r.json())
+    for item in r.json():
+        if item['completed'] == True:
+            NUMBER_OF_DONE_TASKS += 1
 
-print(f'Employee {EMPLOYEE_NAME} is done with tasks ({
-      NUMBER_OF_DONE_TASKS}/{TOTAL_NUMBER_OF_TASKS})')
+    print(f'Employee {EMPLOYEE_NAME} is done with tasks ({NUMBER_OF_DONE_TASKS}/{TOTAL_NUMBER_OF_TASKS})')
 
-for item in r.json():
-    print(' \t', item['title'])
+    for item in r.json():
+        print(' \t', item['title'])
+
+
+if __name__ == '__main__':
+    rest_api()
