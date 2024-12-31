@@ -24,7 +24,7 @@ def rest_api():
 
     for item in r.json():
         if item['completed'] is True:
-            print('\t', item['title'])
+            print('\t ', item['title'])
 
 
 if __name__ == '__main__':
