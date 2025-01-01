@@ -9,24 +9,22 @@ import sys
 
 def rest_api(emp_id):
     """Main function of module"""
-    s = requests.get(
-        f'https://jsonplaceholder.typicode.com/users/{emp_id}')
-    r = requests.get(
-        f'https://jsonplaceholder.typicode.com/users/{emp_id}/todos')
-    filename = emp_id + '.json'
-    json_dict = {}
-    USER_ID = emp_id
-    USERNAME = s.json()['username']
-    dict_val = {}
-    item_list = []
-    with open(filename, 'w') as f:
-        for item in r.json():
-            dict_val["task"] = item['title']
-            dict_val["completed"] = item['completed']
-            dict_val["username"] = USERNAME
-            item_list.append(dict_val)
-        json_dict[USER_ID] = item_list
-        json.dump(json_dict, f)
+    url = 'https://jsonplaceholder.typicode.com/users/{}'.format(emp_id)
+    response = requests.get(url)
+    user = response.json()
+    url = 'https://jsonplaceholder.typicode.com/todos?userId={}'.format(emp_id)
+    response = requests.get(url)
+    todos = response.json()
+    data = {emp_id: []}
+    for todo in todos:
+        task = {
+            "task": todo.get('title'),
+            "completed": todo.get('completed'),
+            "username": user.get('username')
+        }
+        data[emp_id].append(task)
+    with open('{}.json'.format(emp_id), 'w') as file:
+        json.dump(data, file)
 
 
 if __name__ == '__main__':
