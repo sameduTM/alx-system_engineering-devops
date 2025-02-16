@@ -24,7 +24,7 @@ def number_of_subscribers(subreddit):
 
     response = requests.get(
         "https://oauth.reddit.com/r/{}/about".format(subreddit),
-        headers=headers)
+        headers=headers, allow_redirects=False)
     try:
         x = response.json()['data']['subscribers']
         return x
