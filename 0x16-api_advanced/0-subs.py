@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""0. How many subs?"""
 import requests
 import requests.auth
 
