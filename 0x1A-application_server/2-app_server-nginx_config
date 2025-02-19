@@ -1,0 +1,25 @@
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        server_name wanyama-ken.tech;
+
+        root /var/www/html;
+        index index.htm index.html index.nginx-debian.html;
+
+        location / {
+                try_files $uri $uri/ =404;
+                add_header X-Served-By $hostname;
+        }
+        location = /airbnb-onepage/ {
+                proxy_pass http://127.0.0.1:5000/airbnb-onepage/;
+        }
+        rewrite ^/redirect_me/?$ http://wanyama-ken.tech/ permanent;
+
+        error_page 404 /custom_404.html;
+        location = /custom_404.html {
+            internal;
+        }
+
+}
+~     
