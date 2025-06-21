@@ -14,17 +14,17 @@ def gather_data_from_api(empId):
     EMPLOYEE_NAME = requests.get(users_url).json()["name"]
     TOTAL_NUMBER_OF_TASKS = len(requests.get(todos_url).json())
     NUMBER_OF_DONE_TASKS = len([i for i in requests.get(todos_url).json()
-                                 if i["completed"] == True])
-    
+                                 if i["completed"] is True])
+
     print(
         f"Employee {EMPLOYEE_NAME} is done with tasks"
         f"({NUMBER_OF_DONE_TASKS}/{TOTAL_NUMBER_OF_TASKS}):"
     )
     for item in requests.get(todos_url).json():
-        if item["completed"] == True:
+        if item["completed"] is True:
             TASK_TITLE = item["title"]
             print(f"\t {TASK_TITLE}")
-    
+
 
 if __name__ == "__main__":
     gather_data_from_api(sys.argv[1])
