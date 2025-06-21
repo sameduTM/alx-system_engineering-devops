@@ -5,6 +5,7 @@ import urllib3
 
 
 def gather_data_from_an_API(empId):
+    """Main function of our aoi function"""
     url = f"https://jsonplaceholder.typicode.com/todos?userId={empId}"
     user_url = f"https://jsonplaceholder.typicode.com/users/{empId}"
     response = urllib3.request("GET", url)
