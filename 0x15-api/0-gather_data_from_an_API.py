@@ -1,52 +1,32 @@
 #!/usr/bin/python3
+"""Python script that, using this REST API, for a given employee ID,
+returns information about his/her TODO list progress.
 """
-This module retrieves and displays the TODO list progress for a given employee ID
-by querying a REST API (https://jsonplaceholder.typicode.com/).
-
-The script fetches the employee's name and their list of tasks, then displays the
-number of completed tasks out of the total, along with the titles of the completed tasks.
-
-Usage:
-    ./0-gather_data_from_an_API.py <employee_id>
-"""
+import requests
 import sys
-import urllib3
 
 
-def gather_data_from_an_API(empId):
-    """
-    Fetches and displays TODO list progress for a given employee.
+def rest_api(emp_id):
+    """Main function of module"""
+    s = requests.get(
+        f'https://jsonplaceholder.typicode.com/users/{emp_id}')
+    r = requests.get(
+        f'https://jsonplaceholder.typicode.com/users/{emp_id}/todos')
+    EMPLOYEE_NAME = s.json()['name']
+    NUMBER_OF_DONE_TASKS = 0
+    TOTAL_NUMBER_OF_TASKS = len(r.json())
+    for item in r.json():
+        if item['completed'] is True:
+            NUMBER_OF_DONE_TASKS += 1
 
-    Args:
-        empId (str): The employee's ID.
+    print(f'''Employee {EMPLOYEE_NAME} is done with tasks({
+        NUMBER_OF_DONE_TASKS}/{TOTAL_NUMBER_OF_TASKS}):''')
 
-    Retrieves the employee's name and list of tasks via API requests,
-    then prints the number of completed tasks out of the total,
-    followed by the titles of the completed tasks.
-    """
-    if empId is not int:
-        print("Error: employee ID must be an integer")
-        return
-    url = f"https://jsonplaceholder.typicode.com/todos?userId={empId}"
-    user_url = f"https://jsonplaceholder.typicode.com/users/{empId}"
-    response = urllib3.request("GET", url)
-    user_resp = urllib3.request("GET", user_url)
-    tasks = response.json()
-    
-    # all tasks
-    y = len(response.json())
-    
-    # completed tasks
-    x = len([
-        item for item in response.json() if item["completed"] == True])
-
-    print(
-        f"Employee {user_resp.json()["name"]}is done with tasks({x}/{y}):")
-    for item in tasks:
-        if item["completed"] == True:
-            print(f"\t{item["title"]}")
+    for item in r.json():
+        if item['completed'] is True:
+            TASK_TITLE = item['title']
+            print('\t', TASK_TITLE)
 
 
-if __name__ == "__main__":
-    empId = sys.argv[1]
-    gather_data_from_an_API(empId)
+if __name__ == '__main__':
+    rest_api(sys.argv[1])
