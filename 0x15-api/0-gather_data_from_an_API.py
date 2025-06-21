@@ -14,7 +14,7 @@ def gather_data_from_api(empId):
     EMPLOYEE_NAME = requests.get(users_url).json()["name"]
     TOTAL_NUMBER_OF_TASKS = len(requests.get(todos_url).json())
     NUMBER_OF_DONE_TASKS = len([i for i in requests.get(todos_url).json()
-                                 if i["completed"] is True])
+                                if i["completed"] is True])
 
     print(
         f"Employee {EMPLOYEE_NAME} is done with tasks"
