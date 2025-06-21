@@ -22,7 +22,8 @@ def gather_data_from_api(empId):
     )
     for item in requests.get(todos_url).json():
         if item["completed"] == True:
-            print(f"\t {item["title"]}")
+            TASK_TITLE = item["title"]
+            print(f"\t {TASK_TITLE}")
     
 
 if __name__ == "__main__":
