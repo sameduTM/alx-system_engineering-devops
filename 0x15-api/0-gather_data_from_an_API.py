@@ -1,12 +1,32 @@
 #!/usr/bin/python3
-"""Python script that, using this REST API, for a given employee ID,
-returns information about his/her TODOs list progress."""
+"""
+This module retrieves and displays the TODO list progress for a given employee ID
+by querying a REST API (https://jsonplaceholder.typicode.com/).
+
+The script fetches the employee's name and their list of tasks, then displays the
+number of completed tasks out of the total, along with the titles of the completed tasks.
+
+Usage:
+    ./0-gather_data_from_an_API.py <employee_id>
+"""
 import sys
 import urllib3
 
 
 def gather_data_from_an_API(empId):
-    """Main function of our api module"""
+    """
+    Fetches and displays TODO list progress for a given employee.
+
+    Args:
+        empId (str): The employee's ID.
+
+    Retrieves the employee's name and list of tasks via API requests,
+    then prints the number of completed tasks out of the total,
+    followed by the titles of the completed tasks.
+    """
+    if empId is not int:
+        print("Error: employee ID must be an integer")
+        return
     url = f"https://jsonplaceholder.typicode.com/todos?userId={empId}"
     user_url = f"https://jsonplaceholder.typicode.com/users/{empId}"
     response = urllib3.request("GET", url)
