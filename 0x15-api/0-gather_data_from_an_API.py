@@ -1,11 +1,13 @@
 #!/usr/bin/python3
-"""Gather data from an API"""
+"""Python script that, using this REST API, for a given employee ID,
+returns information about his/her TODO list progress.
+"""
 import sys
 import urllib3
 
 
 def gather_data_from_an_API(empId):
-    """Main function of our aoi function"""
+    """Main function of our aoi module"""
     url = f"https://jsonplaceholder.typicode.com/todos?userId={empId}"
     user_url = f"https://jsonplaceholder.typicode.com/users/{empId}"
     response = urllib3.request("GET", url)
