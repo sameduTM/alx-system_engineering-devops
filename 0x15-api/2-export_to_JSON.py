@@ -3,8 +3,8 @@
 returns information about his/her TODO list progress.
 """
 import json
-import urllib.request
 import sys
+import urllib.request
 
 
 def export_to_JSON(USER_ID):
@@ -34,7 +34,7 @@ def export_to_JSON(USER_ID):
         }
         user_todo_list.append(fmt)
 
-    user_object = { USER_ID: user_todo_list }
+    user_object = {USER_ID: user_todo_list}
 
     with open(f'{USER_ID}.json', 'w') as jsonfile:
         jsonfile.write(json.dumps(user_object))
