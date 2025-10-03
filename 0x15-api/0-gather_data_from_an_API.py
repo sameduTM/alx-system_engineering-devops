@@ -1,9 +1,9 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """Python script that returns information about a users todo
     list using REST API
 """
-import sys
 import json
+import sys
 import urllib.request
 
 employee_id = int(sys.argv[1])
@@ -17,7 +17,7 @@ with urllib.request.urlopen(user_uri) as f:
 
     user = [x for x in users if x['id'] == employee_id]
 
-    employee_name = user[0]['name']
+    EMPLOYEE_NAME = user[0]['name']
 
 with urllib.request.urlopen(uri_todos) as f:
     user_todos = f.read().decode('utf-8')
@@ -33,7 +33,7 @@ with urllib.request.urlopen(uri_todos) as f:
 
 tasks_progress = f"({NUMBER_OF_DONE_TASKS}/{TOTAL_NUMBER_OF_TASKS})"
 
-print(f"Employee {employee_name} is done with tasks {tasks_progress}:")
+print(f"Employee {EMPLOYEE_NAME} is done with tasks {tasks_progress}:")
 
-for task in completed_tasks:
-    print(f"\t {task}")
+for TASK_TITLE in completed_tasks:
+    print(f"\t {TASK_TITLE}")
