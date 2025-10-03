@@ -1,10 +1,10 @@
 #!/usr/bin/python3
-"""Python script that returns information about a users todo
-    list using REST API
-"""
 import json
 import sys
 import urllib.request
+"""Python script that returns information about a users todo
+   list using REST API
+"""
 
 employee_id = int(sys.argv[1])
 uri_todos = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
