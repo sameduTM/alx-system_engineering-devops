@@ -3,26 +3,40 @@
 returns information about his/her TODO list progress.
 """
 import json
-import requests
+import urllib.request
 import sys
+
 
 def export_to_JSON(USER_ID):
     """Records all tasks that are owned by this employee"""
-    todos_url = f"https://jsonplaceholder.typicode.com/todos?userId={USER_ID}"
-    users_url = f"https://jsonplaceholder.typicode.com/users/{USER_ID}"
+    uri_todos = f'https://jsonplaceholder.typicode.com/todos?userId={USER_ID}'
+    user_uri = 'https://jsonplaceholder.typicode.com/users'
 
-    USERNAME = requests.get(users_url).json()["username"]
-    tasks = []
-    for item in requests.get(todos_url).json():
-        TASK_TITLE = item["title"]
-        TASK_COMPLETED_STATUS = item["completed"]
-        tasks += [{"task": TASK_TITLE, "completed": TASK_COMPLETED_STATUS, "username": USERNAME}]
-    tasks_dict = {USER_ID: tasks}
-    
-    with open(f"{USER_ID}.json", "w") as f:
-        json.dump(tasks_dict, f)
+    with urllib.request.urlopen(user_uri) as f:
+        data = f.read().decode('utf-8')
 
+        users = json.loads(data)
+
+        user = [x for x in users if x.get('id') == USER_ID]
+
+        USERNAME = user[0].get('username')
+
+    with urllib.request.urlopen(uri_todos) as f:
+        user_todos = f.read().decode('utf-8')
+        user_todos = json.loads(user_todos)
+
+    user_todo_list = []
+    for todo in user_todos:
+        fmt = {
+            "task": todo.get('title'),
+            "completed": todo.get('completed'),
+            "username": todo.get('username')
+        }
+        user_todo_list.append(fmt)
+
+    with open(f'{USER_ID}', 'a') as jsonfile:
+        json.dump({f'{USER_ID}': user_todo_list}, jsonfile)
 
 
 if __name__ == "__main__":
-    export_to_JSON(sys.argv[1])
+    export_to_JSON(int(sys.argv[1]))
