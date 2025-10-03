@@ -30,12 +30,14 @@ def export_to_JSON(USER_ID):
         fmt = {
             "task": todo.get('title'),
             "completed": todo.get('completed'),
-            "username": todo.get('username')
+            "username": USERNAME
         }
         user_todo_list.append(fmt)
 
-    with open(f'{USER_ID}', 'a') as jsonfile:
-        json.dump({f'{USER_ID}': user_todo_list}, jsonfile)
+    user_object = { USER_ID: user_todo_list }
+
+    with open(f'{USER_ID}.json', 'w') as jsonfile:
+        jsonfile.write(json.dumps(user_object))
 
 
 if __name__ == "__main__":
