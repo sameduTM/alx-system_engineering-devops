@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     tasks_progress = f"({NUMBER_OF_DONE_TASKS}/{TOTAL_NUMBER_OF_TASKS})"
 
-    print(f"Employee {EMPLOYEE_NAME} is done with tasks {tasks_progress}:")
+    print(f"Employee {EMPLOYEE_NAME} is done with tasks{tasks_progress}:")
 
     for TASK_TITLE in completed_tasks:
         print(f"\t {TASK_TITLE}")
