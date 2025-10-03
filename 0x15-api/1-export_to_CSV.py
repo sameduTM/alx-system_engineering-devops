@@ -19,7 +19,7 @@ def export_to_CSV(USER_ID):
 
         user = [x for x in users if x.get('id') == USER_ID]
 
-        USERN = json.dumps(user[0].get('name'))
+        USERN = json.dumps(user[0].get('username'))
 
     with urllib.request.urlopen(uri_todos) as f:
         user_todos = f.read().decode('utf-8')
@@ -34,7 +34,7 @@ def export_to_CSV(USER_ID):
 
     todo_list = "\n".join(todo_list)
 
-    with open(f'{USER_ID}.csv', 'a') as f:
+    with open(f'{(USER_ID)}.csv', 'a') as f:
         f.writelines(todo_list)
 
 
