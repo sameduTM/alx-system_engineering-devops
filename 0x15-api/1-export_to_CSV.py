@@ -1,29 +1,18 @@
 #!/usr/bin/python3
-"""Python script that, using this REST API, for a given employee ID,
-returns information about his/her TODO list progress.
+"""Using what you did in the task #0, extend your Python script to export
+data in the CSV format.
 """
 import requests
 import sys
 
+def export_to_CSV(USER_ID):
+    """Records all tasks that are owned by this employee"""
+    todos_url = f"https://jsonplaceholder.typicode.com/todos?userId={USER_ID}"
+    users_url = f"https://jsonplaceholder.typicode.com/users/{USER_ID}"
+    with open(f"{USER_ID}.csv", "w") as f:
+        USERNAME = requests.get(users_url).json()["username"]
+        for item in requests.get(todos_url).json():
+            f.write(f'"{USER_ID}", "{USERNAME}", "{item["completed"]}", "{item["title"]}"\n')
 
-def rest_api(emp_id):
-    """Main function of module"""
-    s = requests.get(
-        f'https://jsonplaceholder.typicode.com/users/{emp_id}')
-    r = requests.get(
-        f'https://jsonplaceholder.typicode.com/users/{emp_id}/todos')
-    USER_ID = emp_id
-    USERNAME = s.json()['username']
-    filename = USER_ID + '.csv'
-
-    with open(filename, 'w') as f:
-        for item in r.json():
-            TASK_COMPLETED_STATUS = item['completed']
-            TASK_TITLE = item['title']
-            csv_str = f'''"{USER_ID}","{USERNAME}","{
-                TASK_COMPLETED_STATUS}","{TASK_TITLE}"'''
-            f.write(csv_str + '\n')
-
-
-if __name__ == '__main__':
-    rest_api(sys.argv[1])
+if __name__ == "__main__":
+    export_to_CSV(sys.argv[1])

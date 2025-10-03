@@ -7,27 +7,27 @@ import requests
 import sys
 
 
-def rest_api():
-    """Main function of module"""
-    url = 'https://jsonplaceholder.typicode.com/users'
-    users = requests.get(url).json()
-    users_dict = {}
-    for user in users:
-        user_id = user.get('id')
-        user_name = user.get('username')
-        url = f'https://jsonplaceholder.typicode.com/todos?userId={user_id}'
-        todos = requests.get(url).json()
-        todos_list = []
-        for todo in todos:
-            todos_list.append({
-                "task": todo.get('title'),
-                "completed": todo.get('completed'),
-                "username": user_name
-            })
-        users_dict[user_id] = todos_list
-    with open('todo_all_employees.json', 'w') as f:
-        json.dump(users_dict, f)
+def todo_all_employees():
+    """Dictionary of list of dictionaries"""
+    users_url = "https://jsonplaceholder.typicode.com/users"
+    todos_url = "https://jsonplaceholder.typicode.com/todos"
 
+    all_tasks_dict = {}
+    for user in requests.get(users_url).json():
+        USER_ID = user["id"]
+        USERNAME = user["username"]
+        todos_url = f"https://jsonplaceholder.typicode.com/todos?userId={USER_ID}"
+        tasks = []
+        for item in requests.get(todos_url).json():
+            TASK_TITLE = item["title"]
+            TASK_COMPLETED_STATUS = item["completed"]
+            tasks += [{"username": USERNAME, "task": TASK_TITLE, "completed": TASK_COMPLETED_STATUS}]
+        all_tasks_dict[USER_ID] = tasks
 
-if __name__ == '__main__':
-    rest_api()
+    with open("todo_all_employees.json", "w") as f:
+        f.write(json.dumps(all_tasks_dict))
+
+    
+
+if __name__ == "__main__":
+    todo_all_employees()

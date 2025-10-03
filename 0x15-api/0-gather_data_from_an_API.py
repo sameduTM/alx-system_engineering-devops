@@ -1,30 +1,39 @@
-#!/usr/bin/python3
-"""Write a Python script that, using this REST API, for a given employee ID,
-returns information about his/her TODO list progress.
+#!/usr/bin/env python3
+"""Python script that returns information about a users todo
+    list using REST API
 """
-import requests
 import sys
+import json
+import urllib.request
 
+employee_id = int(sys.argv[1])
+uri_todos = f'https://jsonplaceholder.typicode.com/todos?userId={employee_id}'
+user_uri = 'https://jsonplaceholder.typicode.com/users'
 
-def gather_data_from_api(empId):
-    """Main function of module"""
-    todos_url = f"https://jsonplaceholder.typicode.com/todos?userId={empId}"
-    users_url = f"https://jsonplaceholder.typicode.com/users/{empId}"
+with urllib.request.urlopen(user_uri) as f:
+    data = f.read().decode('utf-8')
 
-    EMPLOYEE_NAME = requests.get(users_url).json()["name"]
-    TOTAL_NUMBER_OF_TASKS = len(requests.get(todos_url).json())
-    NUMBER_OF_DONE_TASKS = len([i for i in requests.get(todos_url).json()
-                                if i["completed"] is True])
+    users = json.loads(data)
 
-    print(
-        f"Employee {EMPLOYEE_NAME} is done with tasks"
-        f"({NUMBER_OF_DONE_TASKS}/{TOTAL_NUMBER_OF_TASKS}):"
-    )
-    for item in requests.get(todos_url).json():
-        if item["completed"] is True:
-            TASK_TITLE = item["title"]
-            print(f"\t {TASK_TITLE}")
+    user = [x for x in users if x['id'] == employee_id]
 
+    employee_name = user[0]['name']
 
-if __name__ == "__main__":
-    gather_data_from_api(sys.argv[1])
+with urllib.request.urlopen(uri_todos) as f:
+    user_todos = f.read().decode('utf-8')
+
+    user_todos = json.loads(user_todos)
+
+    completed_tasks = [ct['title'] for ct in
+                       user_todos if ct['completed'] is True]
+
+    NUMBER_OF_DONE_TASKS = len(completed_tasks)
+
+    TOTAL_NUMBER_OF_TASKS = len(user_todos)
+
+tasks_progress = f"({NUMBER_OF_DONE_TASKS}/{TOTAL_NUMBER_OF_TASKS})"
+
+print(f"Employee {employee_name} is done with tasks {tasks_progress}:")
+
+for task in completed_tasks:
+    print(f"\t {task}")

@@ -6,26 +6,23 @@ import json
 import requests
 import sys
 
+def export_to_JSON(USER_ID):
+    """Records all tasks that are owned by this employee"""
+    todos_url = f"https://jsonplaceholder.typicode.com/todos?userId={USER_ID}"
+    users_url = f"https://jsonplaceholder.typicode.com/users/{USER_ID}"
 
-def rest_api(emp_id):
-    """Main function of module"""
-    url = 'https://jsonplaceholder.typicode.com/users/{}'.format(emp_id)
-    response = requests.get(url)
-    user = response.json()
-    url = 'https://jsonplaceholder.typicode.com/todos?userId={}'.format(emp_id)
-    response = requests.get(url)
-    todos = response.json()
-    data = {emp_id: []}
-    for todo in todos:
-        task = {
-            "task": todo.get('title'),
-            "completed": todo.get('completed'),
-            "username": user.get('username')
-        }
-        data[emp_id].append(task)
-    with open('{}.json'.format(emp_id), 'w') as file:
-        json.dump(data, file)
+    USERNAME = requests.get(users_url).json()["username"]
+    tasks = []
+    for item in requests.get(todos_url).json():
+        TASK_TITLE = item["title"]
+        TASK_COMPLETED_STATUS = item["completed"]
+        tasks += [{"task": TASK_TITLE, "completed": TASK_COMPLETED_STATUS, "username": USERNAME}]
+    tasks_dict = {USER_ID: tasks}
+    
+    with open(f"{USER_ID}.json", "w") as f:
+        json.dump(tasks_dict, f)
 
 
-if __name__ == '__main__':
-    rest_api(sys.argv[1])
+
+if __name__ == "__main__":
+    export_to_JSON(sys.argv[1])
